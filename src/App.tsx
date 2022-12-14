@@ -3,25 +3,44 @@ import './App.css'
 import Card from './components/Card';
 import Modal from './components/Modal'
 
+import Ares from './assets/Ares.jpg'
+import Phantom from './assets/Phantom.jpg'
+import Vandal from './assets/Vandal.jpg'
+import Bulldog from './assets/Bulldog.jpg'
+import Specter from './assets/Specter.jpg'
+import Marshal from './assets/Marshal.jpg'
+import Stinger from './assets/Stinger.jpg'
+import Operator from './assets/Operator.jpg'
+import Ghost from './assets/Ghost.jpg'
+import Frenzy from './assets/Frenzy.jpg'
+import Odin from './assets/Odin.jpg'
+import Guardian from './assets/Guardian.jpg'
+import Bucky from './assets/Bucky.jpg'
+import Judge from './assets/Judge.jpg'
+import Classic from './assets/Classic.jpg'
+import Shorty from './assets/Shorty.jpg'
+import Sheriff from './assets/Sheriff.jpg'
+
+
 // 17 cards
 const playableCards = [
-  { id: 1, name: "Phantom", image:"/Phantom.jpg" },
-  { id: 2, name: "Vandal", image: "/Vandal.jpg" },
-  { id: 3, name: "Ares", image: "/Ares.jpg" },
-  { id: 4, name: "Bulldog", image:"/Bulldog.jpg" },
-  { id: 5, name: "Specter", image:"/Specter.jpg" },
-  { id: 6, name: "Marshal", image:"/Marshal.jpg" },
-  { id: 7, name: "Stinger", image:"/Stinger.jpg" },
-  { id: 8, name: "Operator", image:"/Operator.jpg" },
-  { id: 9, name: "Ghost", image:"/Ghost.jpg" },
-  { id: 10, name: "Frenzy", image:"/Frenzy.jpg" },
-  { id: 11, name: "Odin", image:"/Odin.jpg" },
-  { id: 12, name: "Guardian", image:"/Guardian.jpg" },
-  { id: 13, name: "Bucky", image:"/Bucky.jpg" },
-  { id: 14, name: "Judge", image:"/Judge.jpg" },
-  { id: 15, name: "Classic", image:"/Classic.jpg" },
-  { id: 16, name: "Shorty", image:"/Shorty.jpg" },
-  { id: 17, name: "Sheriff", image:"/Sheriff.jpg" },
+  { id: 1, name: "Phantom", image: Phantom },
+  { id: 2, name: "Vandal", image: Vandal },
+  { id: 3, name: "Ares", image: Ares },
+  { id: 4, name: "Bulldog", image: Bulldog },
+  { id: 5, name: "Specter", image: Specter },
+  { id: 6, name: "Marshal", image: Marshal },
+  { id: 7, name: "Stinger", image: Stinger },
+  { id: 8, name: "Operator", image: Operator },
+  { id: 9, name: "Ghost", image: Ghost },
+  { id: 10, name: "Frenzy", image: Frenzy },
+  { id: 11, name: "Odin", image: Odin },
+  { id: 12, name: "Guardian", image: Guardian },
+  { id: 13, name: "Bucky", image: Bucky },
+  { id: 14, name: "Judge", image: Judge },
+  { id: 15, name: "Classic", image: Classic },
+  { id: 16, name: "Shorty", image: Shorty },
+  { id: 17, name: "Sheriff", image: Sheriff }
 ];
 
 function App() {
