@@ -29,7 +29,18 @@ function App() {
   const [gameResult, setGameResult] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
-  const [seenCards, setSeenCards] = useState(new Set());
+  const [seenCards, setSeenCards] = useState(new Set());  
+  
+  useEffect(() => {
+    let highScore = localStorage.getItem("highScore");
+    if (highScore) {
+      setHighScore(parseInt(highScore));
+    }
+  }, [])
+  
+  useEffect(() => {
+    localStorage.setItem("highScore", highScore.toString());
+  }, [highScore])
   
   let unseenCards:any[] = playableCards.filter((card: any) => !seenCards.has(card));
   if (unseenCards.length === 0 && !isDisplayed) {
