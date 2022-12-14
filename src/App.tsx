@@ -39,8 +39,6 @@ function App() {
   }, [])
   
   useEffect(() => {
-    console.log("stored in local storage");
-    
     localStorage.setItem("highScore", highScore.toString());
   }, [highScore])
   
