@@ -1,10 +1,8 @@
-import React from 'react'
-
 export default function Card(props: any) {
   
-  const { name } = props;
+  const { card, handleCardClick } = props;
   
   return (
-    <div className='card'>{name}</div>
+    <div className='card' onClick={() => handleCardClick(card)}>{card.name}</div>
   )
 }

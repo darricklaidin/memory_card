@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 import Card from './components/Card';
 import Modal from './components/Modal'
@@ -25,65 +25,96 @@ const playableCards = [
 ];
 
 function App() {
-
-  const [isDisplayed, setIsDisplayed] = useState(false);  // todo: dont need this; can be derived from game state
-  
+  const [isDisplayed, setIsDisplayed] = useState(false);
+  const [gameResult, setGameResult] = useState(false);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [seenCards, setSeenCards] = useState(new Set());
-  const [gameState, setGameState] = useState("playing"); // playing, won, lost
-  
-  console.log("seen cards:", seenCards);
   
   let unseenCards:any[] = playableCards.filter((card: any) => !seenCards.has(card));
-  console.log("unseen cards:", unseenCards);
-  // todo: if no more unseen card, player wins
+  if (unseenCards.length === 0 && !isDisplayed) {
+    console.log("no more unseen cards");
+    setIsDisplayed(true);
+    setGameResult(true);
+  }
   
-  let unseenCardsToShow:Set<any> = getUnseenCardsToShow();
-  console.log("unseen cards to show:", unseenCardsToShow.size);
-  
-  let seenCardsToShow:Set<any> = getSeenCardsToShow(unseenCardsToShow.size);
-  console.log("seen cards to show:", seenCardsToShow);
-  
-  
+  let seenCardsToShow:Set<any> = getSeenCardsToShow();
+  let unseenCardsToShow:Set<any> = getUnseenCardsToShow(seenCardsToShow);
   const shownCards:any[] = [...unseenCardsToShow, ...seenCardsToShow];  // 8 cards
-  console.log("shown cards:", shownCards);
+  // shuffle shown cards
+  for (let i = shownCards.length - 1; i > 0; i--) {
+    let j = Math.floor(Math.random() * (i + 1));
+    [shownCards[i], shownCards[j]] = [shownCards[j], shownCards[i]];
+  }
   
-  
-  function getUnseenCardsToShow():Set<any> {
-    let n = 8;
-    if (seenCards.size > 0) {
-      let max = Math.min(7, unseenCards.length);
-      n = (Math.random() * max) + 1;
-    }
-    // randomly pick n cards from unseenCards
+  function getUnseenCardsToShow(seenCardsToShow:Set<any>):Set<any> {
+    let remainingLength = 8 - seenCardsToShow.size;
     let unseenCardsToShow:Set<any> = new Set();
-    for (let i = 0; i < n; i++) {
-      let index = Math.floor(Math.random() * unseenCards.length);
-      
-      while (unseenCardsToShow.has(unseenCards[index])) {
-        index = Math.floor(Math.random() * unseenCards.length);
+    
+    if (unseenCards.length < remainingLength) {
+      for (let i = 0; i < unseenCards.length; i++) {
+        // show all unseen cards (might need to randomize)
+        unseenCardsToShow.add(unseenCards[i]);
       }
-      
-      unseenCardsToShow.add(unseenCards[index]);
+      remainingLength -= unseenCardsToShow.size;
+      for (let i = 0; i < remainingLength; i++) {
+        // show random of seen cards
+        let index = Math.floor(Math.random() * seenCards.size);
+        while (seenCardsToShow.has([...seenCards][index]) || unseenCardsToShow.has([...seenCards][index])) {
+          index = Math.floor(Math.random() * seenCards.size);
+        }
+        unseenCardsToShow.add([...seenCards][index]);
+      }
+    }
+    else {
+      for (let i = 0; i < remainingLength; i++) {
+        let index = Math.floor(Math.random() * unseenCards.length);
+        while (unseenCardsToShow.has(unseenCards[index])) {
+          index = Math.floor(Math.random() * unseenCards.length);
+        }
+        unseenCardsToShow.add(unseenCards[index]);
+      }
     }
     return unseenCardsToShow;
   }
   
-  function getSeenCardsToShow(unseenCardsShownLength:number):Set<any> {
-    const n = 8 - unseenCardsShownLength;
+  function getSeenCardsToShow():Set<any> {
+    if (seenCards.size === 0) return new Set();
+    
+    let n = Math.floor(Math.random() * Math.min(7, seenCards.size)) + 1;
+    
+    // randomly pick n cards from seenCards
     let seenCardsToShow:Set<any> = new Set();
-    let seenCardsList = Array.from(seenCards);
+
     for (let i = 0; i < n; i++) {
-      let index = Math.floor(Math.random() * seenCardsList.length);
-      
-      while (seenCardsToShow.has(seenCardsList[index])) {
-        index = Math.floor(Math.random() * seenCardsList.length);
+      let index = Math.floor(Math.random() * seenCards.size);
+      while (seenCardsToShow.has([...seenCards][index])) {
+        index = Math.floor(Math.random() * seenCards.size);
       }
-      
-      seenCardsToShow.add(seenCardsList[index]);
+      seenCardsToShow.add([...seenCards][index]);
     }
     return seenCardsToShow;
+  }
+  
+  function handleCardClick(card:any) {
+    if (seenCards.has(card)) {
+      console.log("game over");
+      setIsDisplayed(true);
+      setGameResult(false);
+      return;
+    }
+    
+    setSeenCards(new Set(seenCards).add(card));
+    setScore(score + 1);
+    if (score + 1 > highScore) {
+      setHighScore(score + 1);
+    }
+  }
+  
+  function handleRestartClick() {
+    setIsDisplayed(false);
+    setScore(0);
+    setSeenCards(new Set());
   }
   
   return (
@@ -93,12 +124,20 @@ function App() {
       <div className="cardContainer">
         {
           shownCards.map((card: any) => {
-            return <Card key={card.id} name={card.name} />
+            return <Card 
+                      key={card.id} 
+                      card={card} 
+                      handleCardClick={handleCardClick} />
           })
         }
       </div>
       
-      <Modal isDisplayed={isDisplayed} />
+      <Modal 
+        isDisplayed={isDisplayed}
+        gameResult={gameResult}
+        score={score}
+        highScore={highScore}
+        handleRestartClick={handleRestartClick} />
       
     </div>
   )
