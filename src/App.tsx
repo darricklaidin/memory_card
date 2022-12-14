@@ -5,23 +5,23 @@ import Modal from './components/Modal'
 
 // 17 cards
 const playableCards = [
-  { id: 1, name: "Phantom" },
-  { id: 2, name: "Vandal" },
-  { id: 3, name: "Ares" },
-  { id: 4, name: "Bulldog" },
-  { id: 5, name: "Specter" },
-  { id: 6, name: "Marshal" },
-  { id: 7, name: "Stinger" },
-  { id: 8, name: "Operator" },
-  { id: 9, name: "Ghost" },
-  { id: 10, name: "Frenzy" },
-  { id: 11, name: "Odin" },
-  { id: 12, name: "Guardian" },
-  { id: 13, name: "Bucky" },
-  { id: 14, name: "Judge" },
-  { id: 15, name: "Classic" },
-  { id: 16, name: "Shorty" },
-  { id: 17, name: "Sheriff" },
+  { id: 1, name: "Phantom", image:"/Phantom.jpg" },
+  { id: 2, name: "Vandal", image: "/Vandal.jpg" },
+  { id: 3, name: "Ares", image: "/Ares.jpg" },
+  { id: 4, name: "Bulldog", image:"/Bulldog.jpg" },
+  { id: 5, name: "Specter", image:"/Specter.jpg" },
+  { id: 6, name: "Marshal", image:"/Marshal.jpg" },
+  { id: 7, name: "Stinger", image:"/Stinger.jpg" },
+  { id: 8, name: "Operator", image:"/Operator.jpg" },
+  { id: 9, name: "Ghost", image:"/Ghost.jpg" },
+  { id: 10, name: "Frenzy", image:"/Frenzy.jpg" },
+  { id: 11, name: "Odin", image:"/Odin.jpg" },
+  { id: 12, name: "Guardian", image:"/Guardian.jpg" },
+  { id: 13, name: "Bucky", image:"/Bucky.jpg" },
+  { id: 14, name: "Judge", image:"/Judge.jpg" },
+  { id: 15, name: "Classic", image:"/Classic.jpg" },
+  { id: 16, name: "Shorty", image:"/Shorty.jpg" },
+  { id: 17, name: "Sheriff", image:"/Sheriff.jpg" },
 ];
 
 function App() {
@@ -39,12 +39,13 @@ function App() {
   }, [])
   
   useEffect(() => {
+    console.log("stored in local storage");
+    
     localStorage.setItem("highScore", highScore.toString());
   }, [highScore])
   
   let unseenCards:any[] = playableCards.filter((card: any) => !seenCards.has(card));
   if (unseenCards.length === 0 && !isDisplayed) {
-    console.log("no more unseen cards");
     setIsDisplayed(true);
     setGameResult(true);
   }
@@ -109,7 +110,6 @@ function App() {
   
   function handleCardClick(card:any) {
     if (seenCards.has(card)) {
-      console.log("game over");
       setIsDisplayed(true);
       setGameResult(false);
       return;
